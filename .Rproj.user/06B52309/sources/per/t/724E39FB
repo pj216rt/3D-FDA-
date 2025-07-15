@@ -1,0 +1,27 @@
+{
+    "id": "724E39FB",
+    "path": "H:/functional_regress/grid_sim.R",
+    "project_path": "grid_sim.R",
+    "type": "r_source",
+    "hash": "818230851",
+    "contents": "",
+    "dirty": false,
+    "created": 1740672651590.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "597,0",
+        "scrollLine": "0"
+    },
+    "folds": "41|55|87|0|\n90|51|164|0|\n168|63|198|0|\n201|66|225|0|\n228|39|238|0|\n242|63|265|0|\n269|77|538|0|\n543|71|567|0|\n",
+    "lastKnownWriteTime": 1749153532,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1749160362697,
+    "read_only": false,
+    "read_only_alternatives": []
+}

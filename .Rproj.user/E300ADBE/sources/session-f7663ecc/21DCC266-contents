@@ -1,0 +1,5 @@
+#History files
+.Rhistory
+
+#Session Data files
+.RData

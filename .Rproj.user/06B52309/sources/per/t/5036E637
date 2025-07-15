@@ -1,0 +1,27 @@
+{
+    "id": "5036E637",
+    "path": "H:/functional_regress/goldsmith_modified.R",
+    "project_path": "goldsmith_modified.R",
+    "type": "r_source",
+    "hash": "388383550",
+    "contents": "",
+    "dirty": false,
+    "created": 1741104271505.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "97,35",
+        "scrollLine": "79"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1741112244,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1741112244,
+    "read_only": false,
+    "read_only_alternatives": []
+}
