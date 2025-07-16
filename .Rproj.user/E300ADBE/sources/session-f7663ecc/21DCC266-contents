@@ -1,8 +1,0 @@
-#History files
-.Rhistory
-
-#Session Data files
-.RData
-
-#Example cache or output folders
-.Rproj.user/

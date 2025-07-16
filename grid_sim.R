@@ -679,10 +679,18 @@ param_grid <- expand.grid(
   var_random = var_random_effects
 )
 
+#add replication number
+n_reps <- 10
+
 #Simulation
 results_list <- list()
 for (i in 1:nrow(param_grid)) {
   params <- param_grid[i, ]
+  
+  #results per replication
+  rep_results <- list()
+  
+  for (rep in 1:n_reps) {
   
   #generate splines
   generated.beta <- beta.gen.fun.tri(grid.size = params$D, knots = params$Kt_gen, 
@@ -743,15 +751,19 @@ for (i in 1:nrow(param_grid)) {
   gibbs.IMSE <- rowMeans((golds.model$beta.pm - generated.beta)^2)
   
   #store results
-  results_list[[i]] <- list(
-    params = params,
-    # stan.fixed_effects = summarized_beta_values,
+  rep_results[[rep]] <- list(
     stan.coverage.calc = coverage,
     stan.integrated_MSE = IM_squared,
     stan.run.time = stan_runtime,
-    gibbs.coverage <- gibbs.cover,
-    gibbs.integrated_MSE <- gibbs.IMSE,
-    gibbs.run.time <- gibbs_runtime
+    gibbs.coverage = gibbs.cover,
+    gibbs.integrated_MSE = gibbs.IMSE,
+    gibbs.run.time = gibbs_runtime
+  )
+  }
+  
+  results_list[[i]] <- list(
+    params = params,
+    rep_results = rep_results
   )
   
   
@@ -762,35 +774,42 @@ for (i in 1:nrow(param_grid)) {
 
 
 
-##EXTRACTION STUFF###
-#extracting the results of the list
-params <- lapply(results_list, function(x) x[[1]])
+# ##EXTRACTION STUFF###
+# #extracting the results of the list
+# params <- lapply(results_list, function(x) x[[1]])
+# params.df <- as.data.frame(do.call(rbind, params))
+# 
+# stan.run.times <- sapply(results_list, function(x) x[[4]])
+# params.df$stan_times <- stan.run.times
+# 
+# gibbs.run.times <- sapply(results_list, function(x) x[[7]])
+# params.df$gibbs_times <- gibbs.run.times
+# 
+# stan.coverage <- lapply(results_list, function(x) x[[2]])
+# stan.mean.cov <- sapply(stan.coverage, function(tbl) mean(tbl[[2]]))
+# params.df$mean.stan.coverages <- stan.mean.cov
+# 
+# gibbs.coverage <- lapply(results_list, function(x) x[[5]])
+# mean.gibbs.cover <- sapply(gibbs.coverage, mean)
+# params.df$mean.gibbs.coverages <- mean.gibbs.cover
+# 
+# stan.imse <- lapply(results_list, function(x) x[[3]])
+# stan.mean.cov <- sapply(stan.imse, function(tbl) mean(tbl[[2]]))
+# params.df$imse.stan <- stan.mean.cov
+# 
+# gibbs.imse <- lapply(results_list, function(x) x[[6]])
+# mean.gibbs.imse <- sapply(gibbs.imse, mean)
+# params.df$imse.gibbs <- mean.gibbs.imse
+# 
+# #save to csv
+# write.csv(params.df, "partial_results.csv")
+
+#get parameters
+params <- lapply(results_list, function(x) x$params)
 params.df <- as.data.frame(do.call(rbind, params))
 
-stan.run.times <- sapply(results_list, function(x) x[[4]])
-params.df$stan_times <- stan.run.times
-
-gibbs.run.times <- sapply(results_list, function(x) x[[7]])
-params.df$gibbs_times <- gibbs.run.times
-
-stan.coverage <- lapply(results_list, function(x) x[[2]])
-stan.mean.cov <- sapply(stan.coverage, function(tbl) mean(tbl[[2]]))
-params.df$mean.stan.coverages <- stan.mean.cov
-
-gibbs.coverage <- lapply(results_list, function(x) x[[5]])
-mean.gibbs.cover <- sapply(gibbs.coverage, mean)
-params.df$mean.gibbs.coverages <- mean.gibbs.cover
-
-stan.imse <- lapply(results_list, function(x) x[[3]])
-stan.mean.cov <- sapply(stan.imse, function(tbl) mean(tbl[[2]]))
-params.df$imse.stan <- stan.mean.cov
-
-gibbs.imse <- lapply(results_list, function(x) x[[6]])
-mean.gibbs.imse <- sapply(gibbs.imse, mean)
-params.df$imse.gibbs <- mean.gibbs.imse
-
-#save to csv
-write.csv(params.df, "partial_results.csv")
-
-
-str(params.df)
+#stan coverages
+stan.mean.cover <- sapply(results_list, function(x) {
+  mean(sapply(x$rep_results, function(y) mean(y$stan.coverage.calc$coverage_rate)))
+})
+params.df$mean.stan.coverages <- stan.mean.cover
